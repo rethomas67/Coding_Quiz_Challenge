@@ -1,3 +1,4 @@
+var timerCount = 75;
 var body = document.body;
 
 var instructions = document.querySelector(".instructions");
@@ -7,6 +8,8 @@ var questions = document.querySelector(".questions");
 var h2El = document.createElement("h2");
 
 var score = document.querySelector(".score");
+
+var timerElement = document.querySelector(".timer");
 
 var button = document.createElement("button");
 button.addEventListener("mouseover", () => {
@@ -66,7 +69,6 @@ function nextQuestion() {
   h2El.textContent = quiz[idx].question;
   questions.appendChild(h2El);
   for (var j = 0; j < quiz[idx].choices.length; j++) {
-    alert(j);
     button = document.createElement("button");
 
     btnResult = createButton(button, (j + 1).toLocaleString());
@@ -75,31 +77,58 @@ function nextQuestion() {
     btnResult.textContent = quiz[idx].choices[j];
   }
 }
+
 function startQuiz() {
   instructions.innerHTML = "";
   score.textContent = "";
+
+  startTimer();
   nextQuestion();
 }
 
+function startTimer() {
+  // Sets timer
+  timer = setInterval(function () {
+    timerCount--;
+    timerElement.textContent = "Time: " + timerCount;
+    if (timerCount >= 0) {
+      // Tests if win condition is met
+      /*if (isWin && timerCount > 0) {
+          // Clears interval and stops timer
+          clearInterval(timer);
+          winGame();
+        }*/
+    }
+    // Tests if time has run out
+    if (timerCount == 0) {
+      // Clears interval
+      clearInterval(timer);
+    }
+  }, 1000);
+}
+
 function questionResult() {
+  score.textContent = "";
   if (idx < 4) {
     var selection = Number(this.id);
     var result = quiz[idx].answer;
     score.style =
       "text-align: center; font-size: large; color:gray; border-top: 2px solid gray ;";
     if (selection == result) {
-      alert("correct");
-
       score.textContent = "Correct";
     } else {
-      alert("incorrect");
       score.textContent = "Incorrect";
+      timerCount -= 15;
+      if (timerCount < 0) {
+        timerElement.textContent = "Time: 0";
+      }
     }
     idx++;
     questions.innerHTML = "";
     nextQuestion();
   } else {
     questions.innerHTML = "";
+    nextQuestion();
   }
 }
 
