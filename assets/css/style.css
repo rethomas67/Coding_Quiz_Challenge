@@ -40,3 +40,21 @@ body {
   flex-direction: column;
   margin-bottom: 5px;
 }
+
+.submit_score {
+  text-align: center;
+  font-size: medium;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.save_score {
+  text-align: center;
+  font-size: medium;
+  display: flex;
+  justify-content: center;
+
+  flex-direction: column;
+}

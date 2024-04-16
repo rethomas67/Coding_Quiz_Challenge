@@ -1,4 +1,8 @@
 var timerCount = 75;
+var entries = 0;
+var initials = "";
+var viewScores = [];
+var complete = false;
 var body = document.body;
 
 var instructions = document.querySelector(".instructions");
@@ -8,6 +12,7 @@ var questions = document.querySelector(".questions");
 var h2El = document.createElement("h2");
 
 var score = document.querySelector(".score");
+var submitScoreElement = document.querySelector(".submit_score");
 
 var timerElement = document.querySelector(".timer");
 
@@ -18,6 +23,15 @@ button.addEventListener("mouseover", () => {
 button.addEventListener("mouseout", () => {
   button.style.backgroundColor = "blueviolet";
 });
+
+var paragraph = document.createElement("p");
+var saveScore = document.createElement("div");
+var labelTag = document.createElement("label");
+labelTag.setAttribute("for", "initials");
+
+var inputTag = document.createElement("input");
+inputTag.type = "text";
+inputTag.id = "initials";
 
 var idx = 0;
 var quiz = [
@@ -92,12 +106,11 @@ function startTimer() {
     timerCount--;
     timerElement.textContent = "Time: " + timerCount;
     if (timerCount >= 0) {
-      // Tests if win condition is met
-      /*if (isWin && timerCount > 0) {
-          // Clears interval and stops timer
-          clearInterval(timer);
-          winGame();
-        }*/
+      // Tests if quiz is complete
+      if (complete) {
+        // Clears interval and stops timer
+        clearInterval(timer);
+      }
     }
     // Tests if time has run out
     if (timerCount == 0) {
@@ -108,8 +121,7 @@ function startTimer() {
 }
 
 function questionResult() {
-  score.textContent = "";
-  if (idx < 4) {
+  if (idx < 3) {
     var selection = Number(this.id);
     var result = quiz[idx].answer;
     score.style =
@@ -127,8 +139,9 @@ function questionResult() {
     questions.innerHTML = "";
     nextQuestion();
   } else {
+    complete = true;
     questions.innerHTML = "";
-    nextQuestion();
+    submitScore();
   }
 }
 
@@ -157,4 +170,35 @@ function startPage() {
   btnResult.textContent = "Start Quiz";
 }
 
+function storeResult() {
+  entries++;
+  var initials = inputTag.value;
+  viewScores.push({ record: entries, initials: initials, score: timerCount });
+  localStorage.setItem("viewScores", JSON.stringify(viewScores));
+  console.log(viewScores);
+}
+
+function submitScore() {
+  h2El.textContent = "All Done!";
+  submitScoreElement.appendChild(h2El);
+  paragraph.textContent = "Your final score is " + timerCount + ".";
+  submitScoreElement.appendChild(paragraph);
+  saveScore.style =
+    "margin-bottom:5px; text-align: center; font-size: medium; display: flex; justify-content: center; flex-direction: row;gap:20px";
+  submitScoreElement.appendChild(saveScore);
+  labelTag.textContent = "Enter Initials: ";
+  saveScore.appendChild(labelTag);
+  saveScore.appendChild(inputTag);
+  var btnResult = createButton(button, "submit");
+  saveScore.append(btnResult);
+  btnResult.addEventListener("click", storeResult);
+  btnResult.textContent = "Submit";
+}
+
+localStorage.clear();
+var viewScoresResult = JSON.parse(localStorage.getItem("viewScores"));
+if (viewScoresResult) {
+  viewScores = viewScoresResult;
+  entries = viewScores.length;
+}
 startPage();
