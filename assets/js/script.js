@@ -6,10 +6,9 @@ var h1El = document.createElement("h1");
 var questions = document.querySelector(".questions");
 var h2El = document.createElement("h2");
 
-var button = document.createElement("div");
-//button.addEventListener("click", startQuiz);
+var score = document.querySelector(".score");
 
-//button.textContent = "Button One";
+var button = document.createElement("button");
 button.addEventListener("mouseover", () => {
   button.style.backgroundColor = "palevioletred";
 });
@@ -17,66 +16,98 @@ button.addEventListener("mouseout", () => {
   button.style.backgroundColor = "blueviolet";
 });
 
+var idx = 0;
 var quiz = [
   {
-    question: "What is question 1?",
-    choices: ["choice1", "choice2", "choice3", "choice4"],
+    question: `Suppose that str is equal to the string "Mango Apple  Orange". What will str.split() return?`,
+    choices: [
+      `1. ["Mango", "Apple", "Orange"]`,
+      `2. ["Mango", "Apple", "", "Orange"]`,
+      `3. ["Mango Apple  Orange"]`,
+      "4. None of the above.",
+    ],
+    answer: 3,
+  },
+  {
+    question: "How to access the second element of the array arr = [3, 7, 10]?",
+    choices: [
+      "1. arr.indexOf(2)",
+      "2. arr.indexOf(1)",
+      "3. arr[2]",
+      "4. arr[1]",
+    ],
+    answer: 4,
+  },
+  {
+    question: "How to declare a variable in JavaScript?",
+    choices: [
+      "1. Using var",
+      "2. Using declare",
+      "3. Using dec",
+      "4. Using variable",
+    ],
     answer: 1,
+  },
+  {
+    question:
+      "Which of the following denotes the three functions in JavaScript that display dialog boxes?",
+    choices: [
+      "1. alert(), confirmation(), prompt()",
+      "2. alert(), confirm(), prompt()",
+      "3. alert(), error(), warning()",
+      "4. alertDialog(), confirmDialog(), promptDialog()",
+    ],
+    answer: 2,
   },
 ];
 
-/*var startButton = document.createElement("button");
-startButton.addEventListener("click", startQuiz);
-startButton.style = "border-radius:8px; background-color:blueviolet; color:white";
-startButton.textContent = "Button One";
-startButton.addEventListener("mouseover", () => {
-  buttonOne.style.backgroundColor = "palevioletred";
-});
-startButton.addEventListener("mouseout", () => {
-  buttonOne.style.backgroundColor = "blueviolet";
-});
-
-//instructions.appendChild("startButton");
-var buttonOne = document.createElement("button");
-buttonOne.id = "1";
-buttonOne.style = "border-radius:8px; background-color:blueviolet; color:white";
-buttonOne.textContent = "Button One";
-buttonOne.addEventListener("click", questionResultOne);
-buttonOne.addEventListener("mouseover", () => {
-  buttonOne.style.backgroundColor = "palevioletred";
-});
-buttonOne.addEventListener("mouseout", () => {
-  buttonOne.style.backgroundColor = "blueviolet";
-});*/
-
-function startQuiz() {
-  instructions.innerHTML = "";
+function nextQuestion() {
   var btnResult;
-  h2El.textContent = "This is question1!";
+  h2El.textContent = quiz[idx].question;
   questions.appendChild(h2El);
-  for (var j = 0; j < quiz[0].choices.length; j++) {
+  for (var j = 0; j < quiz[idx].choices.length; j++) {
     alert(j);
     button = document.createElement("button");
 
     btnResult = createButton(button, (j + 1).toLocaleString());
     questions.appendChild(btnResult);
-    btnResult.addEventListener("click", questionResultOne);
-    btnResult.textContent = quiz[0].choices[j];
+    btnResult.addEventListener("click", questionResult);
+    btnResult.textContent = quiz[idx].choices[j];
   }
 }
-
-function questionResultOne() {
-  alert(this.id);
+function startQuiz() {
+  instructions.innerHTML = "";
+  score.textContent = "";
+  nextQuestion();
 }
 
-function clearQuestions() {
-  questions.innerHTML = "";
+function questionResult() {
+  if (idx < 4) {
+    var selection = Number(this.id);
+    var result = quiz[idx].answer;
+    score.style =
+      "text-align: center; font-size: large; color:gray; border-top: 2px solid gray ;";
+    if (selection == result) {
+      alert("correct");
+
+      score.textContent = "Correct";
+    } else {
+      alert("incorrect");
+      score.textContent = "Incorrect";
+    }
+    idx++;
+    questions.innerHTML = "";
+    nextQuestion();
+  } else {
+    questions.innerHTML = "";
+  }
 }
 
 function createButton(button, id) {
   var btn = button;
   btn.id = id;
-  btn.style = "border-radius:8px; background-color:blueviolet; color:white;";
+  btn.style =
+    "margin-bottom:5px; border-radius:8px; background-color:blueviolet; color:white;";
 
   btn.addEventListener("mouseover", () => {
     btn.style.backgroundColor = "palevioletred";
@@ -91,8 +122,6 @@ function startPage() {
   instructions.innerHTML = "";
   h1El.textContent = "Coding Quiz Challenge";
   instructions.appendChild(h1El);
-  //button.style =
-  //"border-radius:8px; background-color:blueviolet; color:white display:flex justify-content:center flex-direction:column";
   var btnResult = createButton(button, "title");
   instructions.append(btnResult);
   btnResult.addEventListener("click", startQuiz);
