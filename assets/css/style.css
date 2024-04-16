@@ -39,3 +39,20 @@ body {
   background-color: palevioletred;
   color: white;
 }
+
+.questions {
+  text-align: center;
+  font-size: medium;
+}
+
+.btn_one {
+  border-radius: 8px;
+  background-color: blueviolet;
+  color: white;
+}
+
+.btn_one:hover {
+  border-radius: 8px;
+  background-color: palevioletred;
+  color: white;
+}
