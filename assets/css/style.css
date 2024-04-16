@@ -26,6 +26,10 @@ body {
 .instructions {
   text-align: center;
   font-size: medium;
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  flex-direction: column;
 }
 
 .btn_start {
@@ -43,6 +47,10 @@ body {
 .questions {
   text-align: center;
   font-size: medium;
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  flex-direction: column;
 }
 
 .btn_one {
